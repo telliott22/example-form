@@ -1,0 +1,89 @@
+body{
+    background-color: #d2e1ff;
+}
+
+
+.form-container{
+    height:330px;
+    width: 600px;
+    background-color: white;
+    border-radius:10px;
+    margin: 25% auto;
+}
+.form-container section{
+    background: #dedede;
+    /*border-radius: 5px;*/
+    padding: 10px;
+    border-bottom-right-radius:5px;
+    border-bottom-left-radius:5px;
+
+
+    /*Creates slight overlap between accordion panel content and heading*/
+    position: relative;
+    bottom: 5px;
+}
+.form-container section button{
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #3e4ab8;
+    color:white;
+    height: 25px;
+    width: 100px;
+}
+
+/*Form input CSS*/
+.form-input-block{
+    float: left;
+    height: 50px;
+    width: 200px;
+    margin-top:10px;
+}
+.form-input-block label{
+    margin: 5px;
+    width: 190px;
+    display: block;
+}
+.form-input-block input, .form-input-block select{
+    border-radius: 5px;
+    height: 25px;
+    width: 190px;
+    margin: 5px;
+    border: none;
+}
+
+.dob-inputs input{
+    width: 40px !important;
+}
+
+.gender-input select{
+    width: 150px !important;
+}
+.comment-input textarea{
+    width: 320px;
+    height:90px;
+    border-radius: 5px;
+    margin: 5px;
+    border: none;
+}
+
+
+
+/* Accordion CSS */
+#accordion{
+    padding: 3px;
+    /*margin: 5px;*/
+    height: 340px;
+}
+#accordion h3{
+    color:white;
+    background-color: #ffc600;
+    border-radius: 10px;
+    margin: 0 0 3px 0;
+    padding: 10px;
+
+    position: relative;
+    z-index: 1000;
+}

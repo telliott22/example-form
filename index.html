@@ -1,0 +1,120 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Finer Vision Test Form</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="css/style.css">
+        <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">-->
+
+    </head>
+    <body>
+
+        <main class="form-container">
+            <form method="post" id="detailsForm">
+                <div id="accordion">
+                    <h3>Step 1 : Your details</h3>
+                    <section>
+
+                        <div class="form-input-block">
+                            <label for="firstName">First Name</label>
+                            <input name="firstName" id="firstName" type="text">
+                        </div>
+
+                        <div class="form-input-block">
+                            <label for="surname">Surname</label>
+                            <input name="surname" id="surname" type="text">
+                        </div>
+
+                        <div class="form-input-block">
+                            <label for="emailAddress">Email Address</label>
+                            <input name="emailAddress" id="emailAddress" type="text">
+                        </div>
+
+                        <button type="button">Next ></button>
+
+                    </section>
+                    <h3>Step 2 : More comments</h3>
+                    <section>
+
+                        <div class="form-input-block">
+                            <label for="telephoneNumber">Telephone number</label>
+                            <input name="telephoneNumber" id="telephoneNumber" type="text">
+                        </div>
+
+                        <div class="form-input-block gender-input">
+                            <label for="gender">Surname</label>
+                            <select id="gender">
+                                <option value="0" class="place-holder">Select Gender</option>
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                            </select>
+                        </div>
+
+                        <div class="form-input-block dob-inputs">
+                            <label for="dobDay">Date of birth</label>
+                            <input name="dobDay" id="dobDay" type="text">
+                            <input name="dobMonth" id="dobMonth" type="text">
+                            <input name="dobYear" id="dobYear" type="text">
+                        </div>
+
+                        <button type="button">Next ></button>
+                    </section>
+                    <h3>Step 3 : Final comments</h3>
+                    <section>
+
+                        <div class="form-input-block comment-input">
+                            <label for="comments">Comments</label>
+                            <textarea name="comments" id="comments"></textarea>
+                        </div>
+
+                        <button type="submit">Submit</button>
+
+                    </section>
+                </div>
+            </form>
+
+        </main>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+        <script src="js/main.js"></script>
+
+        <script type="text/javascript">
+
+            $(document).ready(function(){
+
+
+                //Jquery UI accordion init and config
+                $( "#accordion" ).accordion({
+                    heightStyle: "fill"
+                });
+
+
+                //Button logic
+                $('button').on('click',function(e){
+
+                    e.preventDefault();
+
+                    console.log($(this));
+
+
+                    if($(this).attr('type','submit')){
+                        alert('submit')
+                    }else{
+                        //When next button is clicked, trigger 'click' on next h3 - opening next accordion panel
+                        $(this).parent().next().trigger('click');
+                    }
+
+
+                });
+
+            });
+
+        </script>
+    </body>
+</html>
