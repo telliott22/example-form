@@ -221,6 +221,9 @@ input.error{
     overflow-y:scroll;
     border-radius:10px;
 }
+table{
+    width: 100%;
+}
 table, table td, table th{
     border: 1px solid rgba(0, 0, 0, 0.8);
     border-collapse: collapse;
