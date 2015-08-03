@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="stylesheet" href="css/style.css">
-        <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.css">-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 
     </head>
     <body>
@@ -21,17 +21,17 @@
 
                         <div class="form-input-block">
                             <label for="firstName">First Name</label>
-                            <input name="firstName" id="firstName" type="text">
+                            <input name="firstName" id="firstName" type="text" required>
                         </div>
 
                         <div class="form-input-block">
                             <label for="surname">Surname</label>
-                            <input name="surname" id="surname" type="text">
+                            <input name="surname" id="surname" type="text" required>
                         </div>
 
                         <div class="form-input-block">
                             <label for="emailAddress">Email Address</label>
-                            <input name="emailAddress" id="emailAddress" type="text">
+                            <input name="emailAddress" id="emailAddress" type="email" required>
                         </div>
 
                         <button type="button">Next ></button>
@@ -42,12 +42,12 @@
 
                         <div class="form-input-block">
                             <label for="telephoneNumber">Telephone number</label>
-                            <input name="telephoneNumber" id="telephoneNumber" type="text">
+                            <input name="telephoneNumber" id="telephoneNumber" type="text" required>
                         </div>
 
                         <div class="form-input-block gender-input">
                             <label for="gender">Surname</label>
-                            <select id="gender">
+                            <select id="gender" required>
                                 <option value="0" class="place-holder">Select Gender</option>
                                 <option value="M">Male</option>
                                 <option value="F">Female</option>
@@ -56,9 +56,9 @@
 
                         <div class="form-input-block dob-inputs">
                             <label for="dobDay">Date of birth</label>
-                            <input name="dobDay" id="dobDay" type="text">
-                            <input name="dobMonth" id="dobMonth" type="text">
-                            <input name="dobYear" id="dobYear" type="text">
+                            <input name="dobDay" id="dobDay" type="number" digits>
+                            <input name="dobMonth" id="dobMonth" type="number" digits>
+                            <input name="dobYear" id="dobYear" type="number" digits>
                         </div>
 
                         <button type="button">Next ></button>
@@ -76,40 +76,89 @@
                     </section>
                 </div>
             </form>
+            <section id="thankYouMessage">
+                <h1>Thank you for submitting your details</h1>
+                <i class="fa fa-thumbs-up fa-4"></i>
+            </section>
 
         </main>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+        <script src="http://cdn.jsdelivr.net/jquery.validation/1.14.0/jquery.validate.min.js"></script>
 
-        <script src="js/main.js"></script>
 
         <script type="text/javascript">
 
             $(document).ready(function(){
 
 
-                //Jquery UI accordion init and config
-                $( "#accordion" ).accordion({
-                    heightStyle: "fill"
+                //Hide thank you message
+                $('#thankYouMessage').hide();
+                $('#thankYouMessage i').fadeOut();
+
+                //Validation rules
+                var validator = $("#detailsForm").validate({
+                    telephoneNumber: {
+                        required: true,
+                        digits: true
+                    },
+                    messages: {
+                        email: {
+                            required: "We need your email address to contact you",
+                            email: "Must be email address"
+                        }
+                    }
+                });
+
+                //Accordion Logic
+                $('#accordion section:not(:first-of-type)').hide();
+
+                $('#accordion section:first-of-type, #accordion h3:first-of-type').addClass('active');
+
+                $('#accordion').on('nextSlide',function() {
+
+                    var $active = $('section.active ');
+
+                    $('.active').removeClass('active');
+                    $active.slideUp();
+                    $active.nextAll('section, h3'). slice(0,2).addClass('active').slideDown();
+
+                    return false;
                 });
 
 
-                //Button logic
+                //Form button logic
                 $('button').on('click',function(e){
 
                     e.preventDefault();
 
-                    console.log($(this));
+                    var $button = $(this);
 
-
-                    if($(this).attr('type','submit')){
-                        alert('submit')
+                    //If button is of type 'submit', submit the form - else validate each input and open next accordion panel
+                    if($button.attr('type') == 'submit'){
+//                        alert('submit');
+                        $('#thankYouMessage').show();
+                        $('#thankYouMessage i').delay(500).fadeIn();
                     }else{
-                        //When next button is clicked, trigger 'click' on next h3 - opening next accordion panel
-                        $(this).parent().next().trigger('click');
-                    }
 
+                        var valid = true;
+
+                        //Validate each field in section of button
+                        $button.parent().find('input').each(function(){
+
+                            //If validation fails exit function
+                            if(validator.element($(this)) == false){
+                                valid = false
+                            }
+
+                        });
+
+                        //If all inputs are valid, when next button is clicked trigger 'click' on next h3 - opening next accordion panel
+                        if(valid == true){
+                            $('#accordion').trigger('nextSlide');
+                        }
+
+                    }
 
                 });
 
