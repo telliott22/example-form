@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="">
+<html>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -14,24 +14,24 @@
     <body>
 
         <main class="form-container">
-            <form method="post" id="detailsForm">
+            <form method="post" action="process_form.php" id="detailsForm">
                 <div id="accordion">
                     <h3>Step 1 : Your details</h3>
                     <section>
 
                         <div class="form-input-block">
                             <label for="firstName">First Name</label>
-                            <input name="firstName" id="firstName" type="text" required>
+                            <input name="firstName" id="firstName" type="text">
                         </div>
 
                         <div class="form-input-block">
                             <label for="surname">Surname</label>
-                            <input name="surname" id="surname" type="text" required>
+                            <input name="surname" id="surname" type="text">
                         </div>
 
                         <div class="form-input-block">
                             <label for="emailAddress">Email Address</label>
-                            <input name="emailAddress" id="emailAddress" type="email" required>
+                            <input name="emailAddress" id="emailAddress" type="email">
                         </div>
 
                         <button type="button">Next ></button>
@@ -42,23 +42,23 @@
 
                         <div class="form-input-block">
                             <label for="telephoneNumber">Telephone number</label>
-                            <input name="telephoneNumber" id="telephoneNumber" type="text" required>
+                            <input name="telephoneNumber" id="telephoneNumber" type="text">
                         </div>
 
                         <div class="form-input-block gender-input">
-                            <label for="gender">Surname</label>
-                            <select id="gender" required>
-                                <option value="0" class="place-holder">Select Gender</option>
-                                <option value="M">Male</option>
-                                <option value="F">Female</option>
+                            <label for="gender">Gender</label>
+                            <select id="gender" name="gender">
+                                <option value="0" class="place-holder" disabled selected>Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
                             </select>
                         </div>
 
                         <div class="form-input-block dob-inputs">
                             <label for="dobDay">Date of birth</label>
-                            <input name="dobDay" id="dobDay" type="number" digits>
-                            <input name="dobMonth" id="dobMonth" type="number" digits>
-                            <input name="dobYear" id="dobYear" type="number" digits>
+                            <input name="dobDay" id="dobDay" type="number" placeholder="DD">
+                            <input name="dobMonth" id="dobMonth" type="number" placeholder="MM">
+                            <input name="dobYear" id="dobYear" type="number" placeholder="YYYY">
                         </div>
 
                         <button type="button">Next ></button>
@@ -78,10 +78,35 @@
             </form>
             <section id="thankYouMessage">
                 <h1>Thank you for submitting your details</h1>
-                <i class="fa fa-thumbs-up fa-4"></i>
+                <div id="fadeInBlock">
+                    <i class="fa fa-thumbs-up fa-4"></i>
+                    <h2 id=""><a class="view-submitted-link" href="#">View submitted details</a></h2>
+                </div>
+
+            </section>
+        </main>
+        <section class="footer-link">
+            <a href="#" class="view-submitted-link">View submitted details</a>
+        </section>
+        <section id="submittedDetailsPage" >
+            <div id="closePage">
+                <i class="fa fa-times"></i>
+            </div>
+            <section class="submitted-details-container">
+                <table id="submittedDetailsTable">
+                    <tr>
+                        <th>First name</th>
+                        <th>Surname</th>
+                        <th>Email Address</th>
+                        <th>Telephone number</th>
+                        <th>Gender</th>
+                        <th>DoB</th>
+                        <th colspan="3">Comments</th>
+                    </tr>
+                </table>
             </section>
 
-        </main>
+        </section>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
         <script src="http://cdn.jsdelivr.net/jquery.validation/1.14.0/jquery.validate.min.js"></script>
@@ -92,21 +117,77 @@
             $(document).ready(function(){
 
 
-                //Hide thank you message
+                //Focus on first input
+                $('input').first().focus();
+
+                //Hide thank you message on load
                 $('#thankYouMessage').hide();
-                $('#thankYouMessage i').fadeOut();
+                $('#fadeInBlock').fadeOut();
+                $('#submittedDetailsPage').hide();
+
+                //Init validation
+                var validator = $("#detailsForm").validate();
 
                 //Validation rules
-                var validator = $("#detailsForm").validate({
-                    telephoneNumber: {
-                        required: true,
-                        digits: true
-                    },
+                $('#firstName').rules('add',{
+                    required: true
+                });
+
+                $('#surname').rules('add',{
+                    required: true
+                });
+
+                $('#emailAddress').rules('add',{
+                    required: true,
+                    email: true,
                     messages: {
-                        email: {
-                            required: "We need your email address to contact you",
-                            email: "Must be email address"
-                        }
+                        email: "Must be email address"
+                    }
+                });
+
+                $('#telephoneNumber').rules('add',{
+                    required: true,
+                    digits: true,
+                    messages: {
+                        digits: "Must be number"
+                    }
+                });
+
+                $('#gender').rules('add',{
+                    required: true
+                });
+
+                $('#dobDay').rules('add',{
+                    required: true,
+                    digits: true,
+                    range: [1, 31],
+                    messages: {
+                        range: "1-31",
+                        required: "Required"
+                    }
+                });
+
+                $('#dobMonth').rules('add',{
+                    required: true,
+                    digits: true,
+                    range: [1, 12],
+                    messages: {
+                        range: "1-12",
+                        required: "Required"
+                    }
+                });
+
+                $('#dobYear').rules('add',{
+                    required: true,
+                    digits: true,
+                    minlength: 4,
+                    maxlength: 4,
+                    range: [0000, 2015],
+                    messages: {
+                        required: "Required",
+                        minlength: 'YYYY',
+                        maxlength: 'YYYY',
+                        range: "< 2015"
                     }
                 });
 
@@ -117,15 +198,59 @@
 
                 $('#accordion').on('nextSlide',function() {
 
-                    var $active = $('section.active ');
+                    var $active = $('section.active');
+                    var $nextSection = $active.nextAll('section').first();
+                    var $nextSectionHeader = $active.nextAll('h3').first();
+
+                    //Check to see if next section exists, if not set next section to step 1
+                    if($nextSection.length == 0){
+
+                        $nextSection = $('section').first();
+                        $nextSectionHeader = $('h3').first();
+                    }
+
 
                     $('.active').removeClass('active');
                     $active.slideUp();
-                    $active.nextAll('section, h3'). slice(0,2).addClass('active').slideDown();
+
+                    $nextSection.addClass('active').slideDown();
+
+                    $nextSection.find('input, textarea').first().focus();
+
+                    $nextSectionHeader.addClass('active').slideDown();
 
                     return false;
                 });
 
+                //Prevent form from submitting on enter - click next button instead
+                $('#detailsForm').on('keydown', function(e) {
+                    if (e.which == 13) {
+                        e.preventDefault();
+
+                        $(':focus').parent().nextAll('button').first().click();
+
+                    }
+                });
+
+
+                //POST form data logic
+                $("form").submit( function () {
+
+                    $.ajax({
+                        type: "POST",
+                        data : $(this).serialize(),
+                        cache: false,
+                        url: "process_form.php",
+                        success: function(data){
+
+                            //If successful show thank you message
+                            $('#thankYouMessage').toggle();
+                            $('#fadeInBlock').delay(500).fadeIn();
+
+                        }
+                    });
+                    return false;
+                });
 
                 //Form button logic
                 $('button').on('click',function(e){
@@ -136,9 +261,13 @@
 
                     //If button is of type 'submit', submit the form - else validate each input and open next accordion panel
                     if($button.attr('type') == 'submit'){
-//                        alert('submit');
-                        $('#thankYouMessage').show();
-                        $('#thankYouMessage i').delay(500).fadeIn();
+
+                        //Submit form and reset afterward
+                        $("form").submit().trigger('reset');
+
+                        $('#accordion').trigger('nextSlide')
+
+
                     }else{
 
                         var valid = true;
@@ -160,6 +289,64 @@
 
                     }
 
+                });
+
+                //Submitted details page logic
+                $('.view-submitted-link').on('click',function(){
+                    $('#submittedDetailsPage').slideToggle();
+
+                    if($('#thankYouMessage').is(':visible')){
+                        $('#thankYouMessage').toggle();
+                    }
+
+                    //AJAX request for submitted details data
+                    $.ajax({
+                        type: "GET",
+                        cache: false,
+                        url: "get_submitted_details.php",
+                        dataType: 'json',
+                        success: function(data){
+
+                            //Remove existing results
+                            $('#submittedDetailsTable tr:not(:first-of-type)').remove();
+
+                            {
+                                for (var i in data)
+                                {
+                                    var row = data[i];
+
+                                    var firstName = row[0];
+                                    var surname = row[1];
+                                    var email = row[2];
+                                    var telephone = row[3];
+                                    var gender = row[4];
+                                    var dob = row[5];
+                                    var comments = row[6];
+
+                                    //Append new row container DB row datta
+                                    $('#submittedDetailsTable').append("<tr><td>"+firstName+"</td><td>"+surname+"</td><td>"+email+"</td><td>"+telephone+"</td><td>"+gender+"</td><td>"+dob+"</td><td>"+comments+"</td></td></tr>")
+
+                                }
+                            }
+
+                        }
+                    });
+                    return false;
+
+                });
+
+                $('#closePage').on('click',function(){
+                    $('#submittedDetailsPage').slideToggle();
+                });
+
+
+                //Close sibmitted details window on ESC pressed
+                $(document).on('keyup', function(e) {
+                    if (e.which == 27) {
+                        if($('#submittedDetailsPage').is(':visible')){
+                            $('#submittedDetailsPage').slideToggle();
+                        }
+                    }
                 });
 
             });
